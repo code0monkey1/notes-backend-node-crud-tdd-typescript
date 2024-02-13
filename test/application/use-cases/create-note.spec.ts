@@ -1,4 +1,4 @@
-import { CreateNoteRepository } from "../../../src/application/interfaces/repositories/create-note-repository";
+import { CreateNoteRepository } from '../../../src/application/interfaces/repositories/create-note-repository';
 import { CreateNoteUseCase } from "../../../src/application/interfaces/use-cases/create-note-use-case";
 import { makeFakeNote } from "../../domain/mocks/entities";
 
@@ -10,9 +10,6 @@ export class CreateNote implements CreateNoteUseCase{
   }
   
 }
-
-
-
 
 describe('create-note', () => {
 
@@ -55,13 +52,14 @@ describe('create-note', () => {
            text: "",
            important: false
          }
+         const {id:expected} = makeFakeNote()
 
          //act 
          const actual = await sut.execute(note)
 
          //assert
          
-         expect(actual).toBe("some_id")
+         expect(actual).toBe(expected)
           
 
     })
