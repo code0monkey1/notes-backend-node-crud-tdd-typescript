@@ -20,7 +20,9 @@ describe('create-note', () => {
     it('should call create note repository with correct data',async()=>{
 
          // arrange 
-         const noteRepo:CreateNoteRepository= await createMockCreateNoteRepository()
+         const noteRepo:CreateNoteRepository= {
+           createNote:jest.fn()
+         }
 
          const sut = createCreateNote(noteRepo)
 
