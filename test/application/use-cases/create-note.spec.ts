@@ -1,6 +1,5 @@
 import { CreateNoteRepository } from "../../../src/application/interfaces/repositories/create-note-repository";
 import { CreateNoteUseCase } from "../../../src/application/interfaces/use-cases/create-note-use-case";
-import { Note, NoteProps } from "../../../src/domain/entities/Note";
 
 export class CreateNote implements CreateNoteUseCase{
   constructor(private createPostRepository:CreateNoteRepository){}
@@ -17,7 +16,7 @@ describe('create-note', () => {
   describe('execute', () => {
 
 
-    it('is defined',()=>{
+    it('is called with notes data',()=>{
 
          // arrange 
          const noteRepo:CreateNoteRepository= createCreateNoteRepository()
@@ -30,14 +29,13 @@ describe('create-note', () => {
            important: false
          }
 
-         const expected:CreateNoteRepository.Response='success'
-
          //act 
-         const actual = sut.execute(note)
+         sut.execute(note)
 
          //assert
 
-         expect(actual).toBe(expected)
+        expect(noteRepo.createNote).toHaveBeenCalledWith(note)
+        expect(noteRepo.createNote).toHaveBeenCalledTimes(1)
 
     })
     
