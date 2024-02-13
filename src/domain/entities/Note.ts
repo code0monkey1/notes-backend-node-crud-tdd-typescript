@@ -13,10 +13,10 @@ export type NoteProps={
 
 export class Note {
 
-  private id:string
-  private userId:string
-  private text:string
-  private important:boolean
+  public readonly id:string
+  public readonly userId:string
+  public readonly text:string
+  public readonly important:boolean
 
   constructor(props:NoteProps){
     this.id=props.id,

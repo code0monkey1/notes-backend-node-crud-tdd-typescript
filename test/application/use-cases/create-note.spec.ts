@@ -1,5 +1,6 @@
 import { CreateNoteRepository } from "../../../src/application/interfaces/repositories/create-note-repository";
 import { CreateNoteUseCase } from "../../../src/application/interfaces/use-cases/create-note-use-case";
+import { makeFakeNote } from "../../domain/mocks/entities";
 
 export class CreateNote implements CreateNoteUseCase{
   constructor(private createPostRepository:CreateNoteRepository){}
@@ -10,6 +11,9 @@ export class CreateNote implements CreateNoteUseCase{
   
 }
 
+
+
+
 describe('create-note', () => {
 
 
@@ -19,7 +23,7 @@ describe('create-note', () => {
     it('is called with notes data',()=>{
 
          // arrange 
-         const noteRepo:CreateNoteRepository= createCreateNoteRepository()
+         const noteRepo:CreateNoteRepository= createMockCreateNoteRepository()
 
          const sut = createCreateNote(noteRepo)
 
@@ -30,11 +34,13 @@ describe('create-note', () => {
          }
 
          //act 
-         sut.execute(note)
+         const actual = sut.execute(note)
 
          //assert
-
-        
+         
+         expect(actual).toBe("some_id")
+          
+ 
 
     })
     
@@ -48,13 +54,15 @@ const createCreateNote=(noteRepo:CreateNoteRepository)=>{
     return   new CreateNote(noteRepo)
 }
 
-const createCreateNoteRepository=()=>{
-
-  
-
-  return {
+const createMockCreateNoteRepository = ():CreateNoteRepository=>{
     
-           createNote:jest.fn()
-           
-         }
+     return {
+         async createNote(
+    _postData: CreateNoteRepository.Request,
+  ): Promise<CreateNoteRepository.Response> {
+    const { id } = makeFakeNote()
+    return id;
+  }
+     }
+     
 }
