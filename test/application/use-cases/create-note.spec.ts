@@ -11,6 +11,18 @@ export class CreateNote implements CreateNoteUseCase{
   
 }
 
+class MockCreateNotesRepository implements CreateNoteRepository{
+  createNote(data: CreateNoteRepository.Request): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+  
+}
+
+type SutTypes={
+  sut:CreateNote,
+  createPostRepositoryStub:MockCreateNotesRepository
+}
+
 describe('create-note', () => {
 
 
@@ -58,15 +70,12 @@ describe('create-note', () => {
          const actual = await sut.execute(note)
 
          //assert
-         
          expect(actual).toBe(expected)
           
 
     })
     
     
-
-  
 })
 
 const createCreateNote=(noteRepo:CreateNoteRepository)=>{
