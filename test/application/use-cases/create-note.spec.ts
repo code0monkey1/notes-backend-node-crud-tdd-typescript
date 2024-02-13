@@ -80,7 +80,7 @@ describe('create-note', () => {
 
 const createCreateNote=(noteRepo:CreateNoteRepository)=>{
      
-    return   new CreateNote(noteRepo)
+    return new CreateNote(noteRepo)
 }
 
 const createMockCreateNoteRepository =async ():Promise<CreateNoteRepository>=>{
