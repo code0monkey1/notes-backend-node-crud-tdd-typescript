@@ -23,7 +23,7 @@ describe('create-note', () => {
     it('is called with notes data',async()=>{
 
          // arrange 
-         const noteRepo:CreateNoteRepository=await createMockCreateNoteRepository()
+         const noteRepo:CreateNoteRepository= await createMockCreateNoteRepository()
 
          const sut = createCreateNote(noteRepo)
 
@@ -34,7 +34,7 @@ describe('create-note', () => {
          }
 
          //act 
-         const actual = sut.execute(note)
+         const actual = await sut.execute(note)
 
          //assert
          
@@ -54,7 +54,7 @@ const createCreateNote=(noteRepo:CreateNoteRepository)=>{
     return   new CreateNote(noteRepo)
 }
 
-const createMockCreateNoteRepository = async ():Promise<CreateNoteRepository>=>{
+const createMockCreateNoteRepository =async ():Promise<CreateNoteRepository>=>{
     
      return {
          async createNote(
