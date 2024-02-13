@@ -1,13 +1,12 @@
 
 export type NoteProps={
-
  id:string,
  userId:string,
  text:string,
  important:boolean
  createdAt: Date;
  updatedAt?: Date;
- 
+
 }
 
 
