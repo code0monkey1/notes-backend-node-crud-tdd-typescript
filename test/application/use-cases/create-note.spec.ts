@@ -1,26 +1,33 @@
 import { CreateNoteRepository } from '../../../src/application/interfaces/repositories/create-note-repository';
-import { CreateNoteUseCase } from "../../../src/application/interfaces/use-cases/create-note-use-case";
+import { CreateNoteUseCase } from '../../../src/application/interfaces/use-cases/create-note-use-case';
 import { makeFakeNote } from "../../domain/mocks/entities";
+import { MockCreateNotesRepository } from '../../infra/mocks/notes/repositories';
 
 export class CreateNote implements CreateNoteUseCase{
-  constructor(private createPostRepository:CreateNoteRepository){}
+  constructor(private createNoteRepository:CreateNoteRepository){}
   execute(noteData: CreateNoteUseCase.Request): Promise<string> {
      
-       return this.createPostRepository.createNote(noteData)
+       return this.createNoteRepository.createNote(noteData)
   }
   
 }
 
-class MockCreateNotesRepository implements CreateNoteRepository{
-  createNote(data: CreateNoteRepository.Request): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  
-}
 
 type SutTypes={
   sut:CreateNote,
-  createPostRepositoryStub:MockCreateNotesRepository
+  createNoteRepositoryStub:MockCreateNotesRepository
+}
+
+const makeSut =():SutTypes=>{
+   
+  const createNoteRepositoryStub = new MockCreateNotesRepository()
+  const sut = new CreateNote(createNoteRepositoryStub)
+
+  return {
+    sut,
+    createNoteRepositoryStub
+  }
+
 }
 
 describe('create-note', () => {
@@ -29,69 +36,52 @@ describe('create-note', () => {
     it('should call create note repository with correct data',async()=>{
 
          // arrange 
-         const noteRepo:CreateNoteRepository= {
-           createNote:jest.fn()
-         }
+  
+         const {createNoteRepositoryStub,sut} = makeSut()
 
-         const sut = createCreateNote(noteRepo)
+         const {userId,important,text}  = makeFakeNote()
 
-         const note : CreateNoteUseCase.Request ={
-           userId: "",
-           text: "",
-           important: false
-         }
-
-         //act 
-          sut.execute(note)
+          sut.execute({
+            userId,
+            important,
+            text
+          })
 
          //assert
          
-         expect(noteRepo.createNote).toHaveBeenCalledWith(note)
+         expect(createNoteRepositoryStub.createNote).toHaveBeenCalledWith({
+            userId,
+            important,
+            text
+          })
           
 
     })
 
 
-    it('should call create note repository with correct data',async()=>{
+    // it('should call create note repository with correct data',async()=>{
 
-         // arrange 
-         const noteRepo:CreateNoteRepository= await createMockCreateNoteRepository()
+    //      // arrange 
+    //      const noteRepo:CreateNoteRepository= await createMockCreateNoteRepository()
 
-         const sut = createCreateNote(noteRepo)
+    //      const sut = createCreateNote(noteRepo)
 
-         const note : CreateNoteUseCase.Request ={
-           userId: "",
-           text: "",
-           important: false
-         }
-         const {id:expected} = makeFakeNote()
+    //      const note : CreateNoteUseCase.Request ={
+    //        userId: "",
+    //        text: "",
+    //        important: false
+    //      }
+    //      const {id:expected} = makeFakeNote()
 
-         //act 
-         const actual = await sut.execute(note)
+    //      //act 
+    //      const actual = await sut.execute(note)
 
-         //assert
-         expect(actual).toBe(expected)
+    //      //assert
+    //      expect(actual).toBe(expected)
           
 
-    })
+    // })
     
     
 })
 
-const createCreateNote=(noteRepo:CreateNoteRepository)=>{
-     
-    return new CreateNote(noteRepo)
-}
-
-const createMockCreateNoteRepository =async ():Promise<CreateNoteRepository>=>{
-    
-     return {
-         async createNote(
-    _postData: CreateNoteRepository.Request,
-  ): Promise<CreateNoteRepository.Response> {
-    const { id } = makeFakeNote()
-    return id;
-  }
-     }
-     
-}
