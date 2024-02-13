@@ -12,7 +12,6 @@ export class CreateNote implements CreateNoteUseCase{
   
 }
 
-
 type SutTypes={
   sut:CreateNote,
   createNoteRepositoryStub:MockCreateNotesRepository
@@ -32,56 +31,65 @@ const makeSut =():SutTypes=>{
 
 describe('create-note', () => {
 
-
-    it('should call create note repository with correct data',async()=>{
-
-         // arrange 
-  
-         const {createNoteRepositoryStub,sut} = makeSut()
-
-         const {userId,important,text}  = makeFakeNote()
-
-          sut.execute({
-            userId,
-            important,
-            text
-          })
-
-         //assert
-         
-         expect(createNoteRepositoryStub.createNote).toHaveBeenCalledWith({
-            userId,
-            important,
-            text
-          })
-          
-
-    })
-
-
-    // it('should call create note repository with correct data',async()=>{
-
-    //      // arrange 
-    //      const noteRepo:CreateNoteRepository= await createMockCreateNoteRepository()
-
-    //      const sut = createCreateNote(noteRepo)
-
-    //      const note : CreateNoteUseCase.Request ={
-    //        userId: "",
-    //        text: "",
-    //        important: false
-    //      }
-    //      const {id:expected} = makeFakeNote()
-
-    //      //act 
-    //      const actual = await sut.execute(note)
-
-    //      //assert
-    //      expect(actual).toBe(expected)
-          
-
-    // })
+      describe('execute', () => {
+        
+        it('should return the note id , after creation',async()=>{
     
+           // arrange 
+    
+           const {sut} = makeSut()
+  
+           const {userId,important,text,id}  = makeFakeNote()
+  
+           
+           const expected =id
+  
+           //act 
+           
+          const actual= await sut.execute({
+             userId,
+             important,
+             text
+           })
+           
+           //assert
+           
+           expect(actual).toBe(expected)
+              
+    
+        })
+      })
+
+      describe('create-notes-repository', () => {
+        
+        it('should call create note repository with correct data',async()=>{
+    
+             // arrange 
+             const {createNoteRepositoryStub,sut} = makeSut()
+    
+             const {userId,important,text}  = makeFakeNote()
+    
+             const createNotesRepoSpy = jest.spyOn(createNoteRepositoryStub,'createNote')
+             
+             //act 
+             sut.execute({
+               userId,
+               important,
+               text
+             })
+             
+             //assert
+             
+             expect(createNotesRepoSpy).toHaveBeenCalledWith({
+                userId,
+                important,
+                text
+              }) 
+    
+        })
+        
+      })
+      
     
 })
 
