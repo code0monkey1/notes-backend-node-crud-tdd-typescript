@@ -17,10 +17,31 @@ export class CreateNote implements CreateNoteUseCase{
 describe('create-note', () => {
 
 
-  describe('execute', () => {
+    it('should call create note repository with correct data',async()=>{
+
+         // arrange 
+         const noteRepo:CreateNoteRepository= await createMockCreateNoteRepository()
+
+         const sut = createCreateNote(noteRepo)
+
+         const note : CreateNoteUseCase.Request ={
+           userId: "",
+           text: "",
+           important: false
+         }
+
+         //act 
+         await sut.execute(note)
+
+         //assert
+         
+         expect(noteRepo.createNote).toHaveBeenCalledWith(note)
+          
+
+    })
 
 
-    it('is called with notes data',async()=>{
+    it('should call create note repository with correct data',async()=>{
 
          // arrange 
          const noteRepo:CreateNoteRepository= await createMockCreateNoteRepository()
@@ -40,12 +61,11 @@ describe('create-note', () => {
          
          expect(actual).toBe("some_id")
           
- 
 
     })
     
-  })
-  
+    
+
   
 })
 
