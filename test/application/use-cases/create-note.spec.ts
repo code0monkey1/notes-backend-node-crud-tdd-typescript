@@ -31,7 +31,7 @@ describe('create-note', () => {
          }
 
          //act 
-         await sut.execute(note)
+          sut.execute(note)
 
          //assert
          
