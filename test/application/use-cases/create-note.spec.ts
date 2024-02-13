@@ -1,16 +1,8 @@
-import { CreateNoteRepository } from '../../../src/application/interfaces/repositories/create-note-repository';
-import { CreateNoteUseCase } from '../../../src/application/interfaces/use-cases/create-note-use-case';
+
+import { CreateNote } from '../../../src/application/use-cases/create-note';
 import { makeFakeNote } from "../../domain/mocks/entities";
 import { MockCreateNotesRepository } from '../../infra/mocks/notes/repositories';
 
-export class CreateNote implements CreateNoteUseCase{
-  constructor(private createNoteRepository:CreateNoteRepository){}
-  execute(noteData: CreateNoteUseCase.Request): Promise<string> {
-     
-       return this.createNoteRepository.createNote(noteData)
-  }
-  
-}
 
 type SutTypes={
   sut:CreateNote,
@@ -36,7 +28,6 @@ describe('create-note', () => {
         it('should return the note id , after creation',async()=>{
     
            // arrange 
-    
            const {sut} = makeSut()
   
            const {userId,important,text,id}  = makeFakeNote()
@@ -45,7 +36,6 @@ describe('create-note', () => {
            const expected =id
   
            //act 
-           
           const actual= await sut.execute({
              userId,
              important,
@@ -53,7 +43,6 @@ describe('create-note', () => {
            })
            
            //assert
-           
            expect(actual).toBe(expected)
               
     
